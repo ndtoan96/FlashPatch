@@ -1,0 +1,11 @@
+num_threads = 4
+root = 'D:\Code\'
+out_dir = 'D:\Code\out'
+
+global_includes = ["**/*.cs", "**/*.h"]
+global_excludes = ['*/Code/*']
+
+[[patches]]
+predecessor = "None"
+find = "a"
+replace = "b"
