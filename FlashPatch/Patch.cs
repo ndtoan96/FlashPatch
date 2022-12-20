@@ -6,8 +6,8 @@ namespace FlashPatch
     {
         public List<string> Includes { get; set; } = new List<string> { "**/*" };
         public List<string> Excludes { get; set; } = new List<string>();
-        public Predecessor Predecessor { get; set; } = Predecessor.None;
-        public List<string> PredecessorParmams { get; set; } = new List<string>();
+        public PreprocessorType Preprocessor { get; set; } = PreprocessorType.None;
+        public List<string> PreprocessorParams { get; set; } = new List<string>();
         public bool IsRegex { get; set; } = false;
         public bool ReplaceFirst { get; set; } = false;
         public string Find { get; set; } = "";
@@ -25,6 +25,21 @@ namespace FlashPatch
             bool applied = false;
             string? newContent = null;
 
+            string tmpContent = content;
+
+            switch (Preprocessor)
+            {
+                case PreprocessorType.None:
+                    break;
+                case PreprocessorType.InnerRemover:
+                    string prefix = PreprocessorParams[0];
+                    char openChar = Char.Parse(PreprocessorParams[1]);
+                    char closeChar = Char.Parse(PreprocessorParams[2]);
+                    InnerRemover remover = new InnerRemover(prefix, openChar, closeChar);
+                    tmpContent = remover.Process(tmpContent);
+                    break;
+            }
+
             Regex pattern;
             if (IsRegex)
             {
@@ -35,18 +50,18 @@ namespace FlashPatch
                 pattern = new Regex(Regex.Escape(Find));
             }
 
-            if (pattern.IsMatch(content))
+            if (pattern.IsMatch(tmpContent))
             {
                 if (ReplaceFirst)
                 {
-                    content = pattern.Replace(content, Replace, 1);
+                    tmpContent = pattern.Replace(tmpContent, Replace, 1);
                 }
                 else
                 {
-                    content = pattern.Replace(content, Replace);
+                    tmpContent = pattern.Replace(tmpContent, Replace);
                 }
                 applied = true;
-                newContent = content;
+                newContent = tmpContent;
             }
 
 
@@ -65,7 +80,7 @@ namespace FlashPatch
         }
     }
 
-    internal enum Predecessor
+    internal enum PreprocessorType
     {
         None,
         InnerRemover,

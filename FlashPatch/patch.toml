@@ -6,6 +6,7 @@ global_includes = ["**/*.cs", "**/*.h"]
 global_excludes = ['*/Code/*']
 
 [[patches]]
-predecessor = "None"
+preprocessor = "InnerRemover"
+preprocessor_params = ["InnerRemover", "(", ")"]
 find = "a"
 replace = "b"
