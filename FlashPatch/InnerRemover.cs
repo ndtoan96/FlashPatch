@@ -21,7 +21,7 @@ namespace FlashPatch
             string output = input;
             while (pattern.IsMatch(output, startMatch))
             {
-                var match = pattern.Match(output);
+                var match = pattern.Match(output, startMatch);
                 int startPos = match.Index + match.Length;
                 int endPos = FindCloseCharPosition(output, openChar, closeChar, startPos);
                 if (endPos != -1)

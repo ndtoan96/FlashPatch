@@ -1,0 +1,106 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Config",
+    "description": "Configuration for silpatcher tool",
+    "type": "object",
+    "properties": {
+        "num_threads": {
+            "description": "Number of running threads",
+            "type": "integer",
+            "minimum": 1
+        },
+        "root": {
+            "description": "Project root folder",
+            "type": "string"
+        },
+        "out_dir": {
+            "description": "Ouput folder of patched files",
+            "type": "string"
+        },
+        "global_includes": {
+            "description": "Glob patterns of globally included files",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "global_excludes": {
+            "description": "Glob patterns of globally excluded files",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "patches": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Name of the patch rule (not required)",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Detail of the patch",
+                        "type": "string"
+                    },
+                    "includes": {
+                        "description": "Glob patterns of included files which only applied in this patch rule",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "excludes": {
+                        "description": "Glob patterns of excluded files which only applied in this patch rule",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "preprocessor": {
+                        "description": "Preprocessor plugin to use before find and replace. For now, only INNER_REMOVER(prefix, openChar, closeChar) is supported, it will remove everything between openChar and closeChar followed a prefix",
+                        "enum": ["NONE", "INNER_REMOVER"]
+                    },
+                    "preprocessor_params": {
+                        "description": "Paramters passed to predecessor",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "regex": {
+                        "description": "Whether regular expression is used",
+                        "type": "boolean"
+                    },
+                    "replace_first": {
+                        "description": "Replace only the first occurrence",
+                        "type": "boolean"
+                    },
+                    "find": {
+                        "description": "Pattern to search for",
+                        "type": "string"
+                    },
+                    "replace": {
+                        "description": "Pattern to replace with",
+                        "type": "string"
+                    },
+                    "insert_top": {
+                        "description": "Additional text to insert to the top of the file in case the patch is applied",
+                        "type": "string"
+                    },
+                    "insert_bottom": {
+                        "description": "Additional text to insert to the bottom of the file in case the patch is applied",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "find",
+                    "replace"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}

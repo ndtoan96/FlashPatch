@@ -1,4 +1,5 @@
-﻿using Tomlyn;
+﻿using System.Text;
+using Tomlyn;
 
 namespace FlashPatch
 {
@@ -6,8 +7,13 @@ namespace FlashPatch
     {
         public static void Main(string[] args)
         {
+            if(args.Length == 0)
+            {
+                Console.WriteLine("Please provide the path of config file!");
+                return;
+            }
 
-            string configText = File.ReadAllText(@"D:\Code\cshaftprojects\FlashPatch\FlashPatch\patch.toml");
+            string configText = File.ReadAllText(args[0], Encoding.UTF8);
             var config = Toml.ToModel<PatchConfig>(configText);
 
             DirectoryInfo outDir = Directory.CreateDirectory(config.OutDir);

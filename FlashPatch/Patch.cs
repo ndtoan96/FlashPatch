@@ -1,13 +1,17 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace FlashPatch
 {
     internal class Patch
     {
+        public string Name { get; set; } = "anonymous";
+        public string Description { get; set; } = "";
         public List<string> Includes { get; set; } = new List<string> { "**/*" };
         public List<string> Excludes { get; set; } = new List<string>();
-        public PreprocessorType Preprocessor { get; set; } = PreprocessorType.None;
+        public PreprocessorType Preprocessor { get; set; } = PreprocessorType.NONE;
         public List<string> PreprocessorParams { get; set; } = new List<string>();
+        [DataMember(Name = "regex")]
         public bool IsRegex { get; set; } = false;
         public bool ReplaceFirst { get; set; } = false;
         public string Find { get; set; } = "";
@@ -29,9 +33,9 @@ namespace FlashPatch
 
             switch (Preprocessor)
             {
-                case PreprocessorType.None:
+                case PreprocessorType.NONE:
                     break;
-                case PreprocessorType.InnerRemover:
+                case PreprocessorType.INNER_REMOVER:
                     string prefix = PreprocessorParams[0];
                     char openChar = Char.Parse(PreprocessorParams[1]);
                     char closeChar = Char.Parse(PreprocessorParams[2]);
@@ -82,7 +86,7 @@ namespace FlashPatch
 
     internal enum PreprocessorType
     {
-        None,
-        InnerRemover,
+        NONE,
+        INNER_REMOVER,
     }
 }
