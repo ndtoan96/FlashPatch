@@ -37,6 +37,14 @@ namespace FlashPatch
 
             string content = File.ReadAllText(file);
             bool fileChanged = false;
+
+            string destPath = Path.Join(outDir, Path.GetFileName(file));
+
+            // If destination file already exists, stop further processing
+            if (Directory.Exists(destPath)) {
+                return;
+            }
+
             foreach (Patch patch in patches)
             {
                 if (patch.IsMatch(file))
@@ -51,7 +59,7 @@ namespace FlashPatch
             }
             if (fileChanged)
             {
-                File.WriteAllText(Path.Join(outDir, Path.GetFileName(file)), content);
+                File.WriteAllText(destPath, content);
                 Console.WriteLine($"Apply patches to file {file}");
             }
         }
